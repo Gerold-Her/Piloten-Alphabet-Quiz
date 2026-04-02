@@ -418,8 +418,17 @@
         };
 
         function restart() {
-            // Wähle 30 zufällige Buchstaben für das Quiz (mit möglicher Wiederholung)
-            order = Array.from({ length: TOTAL }, () => AB[Math.floor(Math.random() * AB.length)]);
+            // Wähle 30 zufällige Buchstaben für das Quiz (ohne aufeinanderfolgende Wiederholungen)
+            order = [];
+            let lastIdx = -1;
+            for (let k = 0; k < TOTAL; k++) {
+                let idx;
+                do {
+                    idx = Math.floor(Math.random() * AB.length);
+                } while (idx === lastIdx);
+                order.push(AB[idx]);
+                lastIdx = idx;
+            }
             i = cor = wrg = 0; adv = false;
             $("dcard").style.display = "none"; $("qcard").style.display = "block";
             upd(); show();
