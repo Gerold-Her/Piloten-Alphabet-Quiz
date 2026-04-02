@@ -384,7 +384,7 @@
                 <ul id="lb-ul" style="list-style: none; padding: 0;"></ul>
             </div>
 
-            <button class="btn ba" onclick="restart()">Nochmal versuchen (Enter)</button>
+            <button class="btn ba" onclick="restart()">Nochmal versuchen</button>
         </div>
         <div class="refsec">
             <button class="rbtn" id="rbtn" onclick="toggleRef()">▾ Referenz anzeigen</button>
@@ -509,7 +509,19 @@
         }
 
         async function saveScore() {
-            const name = $("lb-name").value.trim() || "Anonym";
+            const nameInp = $("lb-name");
+            const name = nameInp.value.trim();
+
+            if (!name) {
+                nameInp.style.borderColor = "#e88a8a";
+                nameInp.value = "";
+                nameInp.placeholder = "⚠️ Bitte Namen eintragen!";
+                setTimeout(() => {
+                    nameInp.style.borderColor = "";
+                    nameInp.placeholder = "Dein Name";
+                }, 3000);
+                return;
+            }
             $("lb-form").style.display = "none";
             $("lb-list").style.display = "block";
             $("lb-ul").innerHTML = "<li style='text-align:center'>Lade Bestenliste...</li>";
@@ -576,9 +588,9 @@
             if ($("qcard").style.display !== "none" && adv) {
                 nxt();
             } else if ($("dcard").style.display !== "none") {
-                if ($("lb-form").style.display !== "none" && document.activeElement === $("lb-name")) {
-                    saveScore();
-                } else {
+                if ($("lb-form").style.display !== "none") {
+                    if (document.activeElement === $("lb-name")) saveScore();
+                } else if ($("lb-list").style.display !== "none") {
                     restart();
                 }
             }
