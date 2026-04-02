@@ -384,7 +384,7 @@
                 <ul id="lb-ul" style="list-style: none; padding: 0;"></ul>
             </div>
 
-            <button class="btn ba" onclick="restart()">Nochmal versuchen</button>
+            <button class="btn ba" onclick="restart()">Nochmal versuchen (Enter)</button>
         </div>
         <div class="refsec">
             <button class="rbtn" id="rbtn" onclick="toggleRef()">▾ Referenz anzeigen</button>
@@ -421,7 +421,7 @@
         ["U", "Uniform"], ["V", "Victor"], ["W", "Whiskey"], ["X", "X-ray"], ["Y", "Yankee"], ["Z", "Zulu"]];
 
         let order = [], i = 0, cor = 0, wrg = 0, adv = false;
-        const TOTAL = 30; // 30 Fragen pro Durchgang
+        const TOTAL = 20; // 20 Fragen pro Durchgang
         const $ = id => document.getElementById(id);
         const norm = s => s.trim().toLowerCase().replace(/[-\s]/g, "");
 
