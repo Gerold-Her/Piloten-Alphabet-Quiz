@@ -384,7 +384,7 @@
                 <ul id="lb-ul" style="list-style: none; padding: 0;"></ul>
             </div>
 
-            <button class="btn ba" onclick="restart()">Nochmal versuchen (Enter)</button>
+            <button class="btn ba" id="restart-btn" onclick="restart()">Nochmal versuchen</button>
         </div>
         <div class="refsec">
             <button class="rbtn" id="rbtn" onclick="toggleRef()">▾ Referenz anzeigen</button>
@@ -505,6 +505,7 @@
             $("lb-form").style.display = "block";
             $("lb-list").style.display = "none";
             $("lb-name").value = "";
+            $("restart-btn").textContent = "Nochmal versuchen";
             $("lb-name").focus();
         }
 
@@ -567,6 +568,7 @@
                 console.error("Firebase Fehler:", error);
                 $("lb-ul").innerHTML = `<li style='text-align:center;color:red'>Fehler: ${error.message}</li>`;
             }
+            $("restart-btn").textContent = "Nochmal versuchen (Enter)";
             document.activeElement.blur(); // Focus entfernen, damit nächstes Enter das Quiz neu startet
         }
 
