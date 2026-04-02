@@ -395,7 +395,25 @@
             Impressum: Gerold Herbsthofer, Linz 2026
         </div>
     </div>
+    <!-- Firebase SDK (Compat Version) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
     <script>
+        // Firebase Konfiguration (HIER DEINE DATEN AUS DER FIREBASE CONSOLE EINTRAGEN)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCGyP1gKjS0eIa8LUKsdvNHS-hvONgY2ko",
+            authDomain: "piloten-alphabet-quiz.firebaseapp.com",
+            projectId: "piloten-alphabet-quiz",
+            storageBucket: "piloten-alphabet-quiz.firebasestorage.app",
+            messagingSenderId: "5789965263",
+            appId: "1:5789965263:web:c3db861ed5af7c635b90ba"
+        };
+        // Initialisiere Firebase
+        if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
+
         const AB = [["A", "Alpha"], ["B", "Bravo"], ["C", "Charlie"], ["D", "Delta"], ["E", "Echo"],
         ["F", "Foxtrot"], ["G", "Golf"], ["H", "Hotel"], ["I", "India"], ["J", "Juliett"],
         ["K", "Kilo"], ["L", "Lima"], ["M", "Mike"], ["N", "November"], ["O", "Oscar"],
@@ -490,22 +508,53 @@
             $("lb-name").focus();
         }
 
-        function saveScore() {
+        async function saveScore() {
             const name = $("lb-name").value.trim() || "Anonym";
-            let lb = JSON.parse(localStorage.getItem("piloten-lb") || "[]");
-            lb.push({ name, cor, d: new Date().getTime() });
-            lb.sort((a, b) => b.cor - a.cor || a.d - b.d);
-            lb = lb.slice(0, 5);
-            localStorage.setItem("piloten-lb", JSON.stringify(lb));
-
             $("lb-form").style.display = "none";
             $("lb-list").style.display = "block";
-            $("lb-ul").innerHTML = lb.map((x, i) => `
-                <li style="display:flex; justify-content:space-between; padding: 6px 0; border-bottom:1px solid rgba(0,0,0,0.05)">
-                    <span><b>${i + 1}.</b> ${x.name}</span>
-                    <span style="font-weight:600">${x.cor} <small style="color:#777770">/ ${TOTAL}</small></span>
-                </li>
-            `).join("");
+            $("lb-ul").innerHTML = "<li style='text-align:center'>Lade Bestenliste...</li>";
+
+            try {
+                if (db) {
+                    const timeout = new Promise((_, reject) =>
+                        setTimeout(() => reject(new Error("Timeout: Keine Antwort von Firebase (Datenbank existiert evtl. nicht oder blockiert).")), 7000)
+                    );
+
+                    const writeOp = db.collection("leaderboard").add({
+                        name: name,
+                        cor: cor,
+                        timestamp: new Date().getTime()
+                    });
+
+                    await Promise.race([writeOp, timeout]);
+
+                    const readOp = db.collection("leaderboard")
+                        .orderBy("cor", "desc")
+                        .limit(5)
+                        .get();
+
+                    const snapshot = await Promise.race([readOp, timeout]);
+
+                    let lbHTML = "";
+                    let rang = 1;
+                    snapshot.forEach((doc) => {
+                        const x = doc.data();
+                        lbHTML += `
+                            <li style="display:flex; justify-content:space-between; padding: 6px 0; border-bottom:1px solid rgba(0,0,0,0.05)">
+                                <span><b>${rang}.</b> ${x.name}</span>
+                                <span style="font-weight:600">${x.cor} <small style="color:#777770">/ ${TOTAL}</small></span>
+                            </li>
+                        `;
+                        rang++;
+                    });
+                    $("lb-ul").innerHTML = lbHTML || "<li style='text-align:center'>Noch keine Einträge</li>";
+                } else {
+                    $("lb-ul").innerHTML = "<li style='text-align:center;color:red'>Firebase ist nicht konfiguriert</li>";
+                }
+            } catch (error) {
+                console.error("Firebase Fehler:", error);
+                $("lb-ul").innerHTML = `<li style='text-align:center;color:red'>Fehler: ${error.message}</li>`;
+            }
             document.activeElement.blur(); // Focus entfernen, damit nächstes Enter das Quiz neu startet
         }
 
