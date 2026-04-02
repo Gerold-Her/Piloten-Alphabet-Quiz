@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Piloten-Alphabet Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-image: url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M80 180A30 30 0 0 1 80 120A45 45 0 0 1 155 90A35 35 0 0 1 200 150A30 30 0 0 1 200 180Z' fill='white' opacity='0.4'/%3E%3C/svg%3E"), linear-gradient(135deg, #e0f2fe 0%, #7dd3fc 100%);
+            background-attachment: fixed;
+            background-size: 300px 300px, 100% 100%;
+            color: #1a1a18;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 2.5rem 1rem 4rem
+        }
+
+        .impressum {
+            text-align: center;
+            font-size: 13px;
+            color: rgba(15, 23, 42, 0.6);
+            margin-top: 3.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        @media(prefers-color-scheme:dark) {
+            body {
+                background-image: url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M80 180A30 30 0 0 1 80 120A45 45 0 0 1 155 90A35 35 0 0 1 200 150A30 30 0 0 1 200 180Z' fill='white' opacity='0.04'/%3E%3C/svg%3E"), linear-gradient(135deg, #0c1222 0%, #17326d 100%);
+                color: #eeede8
+            }
+
+            .impressum {
+                color: rgba(238, 237, 232, 0.5);
+                border-top-color: rgba(255, 255, 255, 0.05);
+            }
+
+            .card,
+            .stat,
+            .done-card {
+                background: #242422 !important;
+                border-color: rgba(255, 255, 255, 0.1) !important
+            }
+
+            input {
+                background: #2e2e2b !important;
+                color: #eeede8 !important;
+                border-color: rgba(255, 255, 255, 0.2) !important
+            }
+
+            .btn {
+                background: #2e2e2b !important;
+                color: #eeede8 !important;
+                border-color: rgba(255, 255, 255, 0.2) !important
+            }
+
+            .ref-item {
+                background: #242422 !important;
+                border-color: rgba(255, 255, 255, 0.08) !important
+            }
+
+            .ref-word,
+            .stat-lbl,
+            #ehi {
+                color: #888880 !important
+            }
+
+            .hint-ok {
+                background: #1a3026;
+                color: #8cdcae;
+                border-color: rgba(109, 191, 138, 0.3);
+            }
+
+            .hint-err {
+                background: #352020;
+                color: #eba1a1;
+                border-color: rgba(232, 138, 138, 0.3);
+            }
+        }
+
+        #app {
+            width: 100%;
+            max-width: 460px
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: -.5px;
+            margin-bottom: 0.5rem
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 15px;
+            color: #777770;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+
+        .plbl {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #777770;
+            margin-bottom: 6px
+        }
+
+        .pbg {
+            height: 6px;
+            background: rgba(0, 0, 0, .1);
+            border-radius: 99px;
+            overflow: hidden;
+            margin-bottom: 1.5rem
+        }
+
+        .pfill {
+            height: 6px;
+            background: linear-gradient(90deg, #1D9E75, #34c99a);
+            border-radius: 99px;
+            width: 0%;
+            transition: width .5s
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 1.25rem
+        }
+
+        .stat {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, .1);
+            border-radius: 8px;
+            padding: .75rem .5rem;
+            text-align: center
+        }
+
+        .stat-val {
+            font-size: 20px;
+            font-weight: 600
+        }
+
+        .stat-lbl {
+            font-size: 11px;
+            color: #777770;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: .5px
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, .1);
+            border-radius: 14px;
+            padding: 2rem 1.75rem 1.75rem;
+            margin-bottom: 1rem
+        }
+
+        .lbig {
+            font-size: 96px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px
+        }
+
+        .irow {
+            display: flex;
+            gap: 8px
+        }
+
+        input[type=text] {
+            flex: 1;
+            font-size: 17px;
+            padding: 11px 14px;
+            border-radius: 8px;
+            border: 1.5px solid rgba(0, 0, 0, .18);
+            background: #f7f7f5;
+            color: #1a1a18;
+            outline: none;
+            font-family: inherit
+        }
+
+        .btn {
+            padding: 11px 20px;
+            border-radius: 8px;
+            border: 1.5px solid rgba(0, 0, 0, .18);
+            background: #f7f7f5;
+            color: #1a1a18;
+            font-size: 15px;
+            font-family: inherit;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap
+        }
+
+        .btn:hover {
+            background: #ebebea
+        }
+
+        #hint {
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+
+        .hint-ok {
+            background: #d6f0e0;
+            color: #1a5c35;
+            border: 1px solid #6dbf8a;
+        }
+
+        .hint-err {
+            background: #fde8e8;
+            color: #7a1f1f;
+            border: 1px solid #e88a8a;
+        }
+
+        #ehi {
+            font-size: 12px;
+            color: #777770;
+            text-align: center;
+            margin-top: 8px
+        }
+
+        #ehi kbd {
+            background: #f0f0ed;
+            border: 1px solid rgba(0, 0, 0, .18);
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 11px
+        }
+
+        .done-card {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, .1);
+            border-radius: 14px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            margin-bottom: 1rem
+        }
+
+        .dscore {
+            font-size: 48px;
+            font-weight: 700;
+            color: #1D9E75;
+            letter-spacing: -1px
+        }
+
+        .done-card h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: .5rem 0
+        }
+
+        .done-card p {
+            font-size: 14px;
+            color: #777770;
+            margin-bottom: 1.75rem;
+            line-height: 1.6
+        }
+
+        .ba {
+            border-color: #1D9E75;
+            color: #1D9E75;
+            font-weight: 600;
+            background: transparent
+        }
+
+        .ba:hover {
+            background: #EAF3DE
+        }
+
+        .refsec {
+            margin-top: 1.25rem;
+            text-align: center
+        }
+
+        .rbtn {
+            background: none;
+            border: none;
+            font-size: 13px;
+            color: #777770;
+            cursor: pointer;
+            font-family: inherit;
+            padding: 4px 8px
+        }
+
+        .rgrid {
+            display: none;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-top: 10px
+        }
+
+        .ri {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, .1);
+            border-radius: 8px;
+            padding: 6px 4px;
+            text-align: center
+        }
+
+        .rl {
+            font-size: 13px;
+            font-weight: 600;
+            display: block
+        }
+
+        .rw {
+            font-size: 11px;
+            color: #777770
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Piloten-Alphabet Quiz</h1>
+        <p class="subtitle">Tippe das dazugehörige Funk-Wort zum angezeigten Buchstaben ein.<br /><small
+                style="opacity: 0.8;">Groß- und Kleinschreibung wird ignoriert.</small></p>
+        <div class="plbl"><span id="plb">Frage 1 von 30</span><span id="ppc">0%</span></div>
+        <div class="pbg">
+            <div class="pfill" id="pbar"></div>
+        </div>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-val" id="srem">1</div>
+                <div class="stat-lbl">Frage</div>
+            </div>
+            <div class="stat">
+                <div class="stat-val" id="scor" style="color:#1D9E75">0</div>
+                <div class="stat-lbl">Richtig</div>
+            </div>
+            <div class="stat">
+                <div class="stat-val" id="swrg" style="color:#e05050">0</div>
+                <div class="stat-lbl">Falsch</div>
+            </div>
+        </div>
+        <div class="card" id="qcard">
+            <div class="lbig" id="ltr">A</div>
+            <div class="irow">
+                <input type="text" id="inp" placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="off"
+                    spellcheck="false" />
+                <button class="btn" id="sbtn" onclick="go()">OK</button>
+            </div>
+            <div id="hint" aria-live="polite"></div>
+            <div id="ehi" style="display:none"><kbd>Enter</kbd> für nächste Frage</div>
+        </div>
+        <div class="done-card" id="dcard" style="display:none">
+            <div style="font-size:48px;margin-bottom:.75rem" id="dico">🏆</div>
+            <div class="dscore" id="dscr"></div>
+            <h2>Runde abgeschlossen!</h2>
+            <p id="dmsg"></p>
+
+            <!-- Leaderboard UI -->
+            <div id="lb-form" style="margin-bottom: 1.5rem;">
+                <input type="text" id="lb-name" placeholder="Dein Name" style="width:100%; margin-bottom: 8px;" />
+                <button class="btn" onclick="saveScore()" style="width:100%">In Bestenliste eintragen (Enter)</button>
+            </div>
+            <div id="lb-list" style="text-align:left; font-size: 14px; margin-bottom: 1.5rem; display:none;">
+                <h3 style="font-size:16px; margin-bottom: 8px; text-align: center;">Top 5 Bestenliste</h3>
+                <ul id="lb-ul" style="list-style: none; padding: 0;"></ul>
+            </div>
+
+            <button class="btn ba" onclick="restart()">Nochmal versuchen (Enter)</button>
+        </div>
+        <div class="refsec">
+            <button class="rbtn" id="rbtn" onclick="toggleRef()">▾ Referenz anzeigen</button>
+            <div class="rgrid" id="rgrid"></div>
+        </div>
+
+        <div class="impressum">
+            Impressum: Gerold Herbsthofer, Linz 2026
+        </div>
+    </div>
+    <script>
+        const AB = [["A", "Alpha"], ["B", "Bravo"], ["C", "Charlie"], ["D", "Delta"], ["E", "Echo"],
+        ["F", "Foxtrot"], ["G", "Golf"], ["H", "Hotel"], ["I", "India"], ["J", "Juliett"],
+        ["K", "Kilo"], ["L", "Lima"], ["M", "Mike"], ["N", "November"], ["O", "Oscar"],
+        ["P", "Papa"], ["Q", "Quebec"], ["R", "Romeo"], ["S", "Sierra"], ["T", "Tango"],
+        ["U", "Uniform"], ["V", "Victor"], ["W", "Whiskey"], ["X", "X-ray"], ["Y", "Yankee"], ["Z", "Zulu"]];
+
+        let order = [], i = 0, cor = 0, wrg = 0, adv = false;
+        const TOTAL = 30; // 30 Fragen pro Durchgang
+        const $ = id => document.getElementById(id);
+        const norm = s => s.trim().toLowerCase().replace(/[-\s]/g, "");
+
+        // Levenshtein distance für smarte Tippfehlertoleranz
+        const lev = (a, b) => {
+            const m = Array.from({ length: b.length + 1 }, (_, i) => [i]);
+            m[0] = Array.from({ length: a.length + 1 }, (_, j) => j);
+            for (let i = 1; i <= b.length; i++)
+                for (let j = 1; j <= a.length; j++)
+                    m[i][j] = b[i - 1] === a[j - 1] ? m[i - 1][j - 1] : Math.min(m[i - 1][j - 1], m[i][j - 1], m[i - 1][j]) + 1;
+            return m[b.length][a.length];
+        };
+
+        function restart() {
+            // Wähle 30 zufällige Buchstaben für das Quiz (mit möglicher Wiederholung)
+            order = Array.from({ length: TOTAL }, () => AB[Math.floor(Math.random() * AB.length)]);
+            i = cor = wrg = 0; adv = false;
+            $("dcard").style.display = "none"; $("qcard").style.display = "block";
+            upd(); show();
+        }
+
+        function show() {
+            adv = false; $("ltr").textContent = order[i][0];
+            const inp = $("inp");
+            inp.value = ""; inp.disabled = false;
+            inp.style.cssText = "flex:1;font-size:17px;padding:11px 14px;border-radius:8px;border:1.5px solid rgba(0,0,0,.18);background:#f7f7f5;color:#1a1a18;outline:none;font-family:inherit";
+            $("sbtn").textContent = "OK";
+            $("hint").style.display = $("ehi").style.display = "none";
+            const p = Math.round(i / TOTAL * 100);
+            $("pbar").style.width = p + "%"; $("plb").textContent = `Frage ${i + 1} von ${TOTAL}`;
+            $("ppc").textContent = p + "%"; $("srem").textContent = `${i + 1}`; // Aufsteigender Zähler
+            if (!("ontouchstart" in window)) inp.focus(); // Kein Autofokus auf Handys
+        }
+
+        function upd() { $("scor").textContent = cor; $("swrg").textContent = wrg; }
+
+        function go() {
+            if (adv) return nxt();
+            const inp = $("inp"), val = norm(inp.value);
+            if (!val) return inp.focus();
+
+            const [letter, word] = order[i], nw = norm(word);
+            const d1 = lev(nw, val), d2 = lev(nw, norm(letter) + val);
+            const ok = Math.min(d1, d2) <= (nw.length > 3 ? 1 : 0); // 1 Tippfehler erlaubt bei längeren Wörtern
+
+            inp.disabled = adv = true; $("sbtn").textContent = "Weiter →";
+            $("ehi").style.display = $("hint").style.display = "block";
+
+            if (ok) {
+                cor++;
+                inp.style.borderColor = "#6dbf8a"; inp.style.backgroundColor = "#d6f0e0"; inp.style.color = "#1a5c35";
+                $("hint").className = "hint-ok"; $("hint").textContent = `Richtig — ${word}`;
+            } else {
+                wrg++;
+                inp.style.borderColor = "#e88a8a"; inp.style.backgroundColor = "#fde8e8"; inp.style.color = "#7a1f1f";
+                $("hint").className = "hint-err"; $("hint").textContent = `Falsch — ${word}`;
+            }
+            upd();
+        }
+
+        function nxt() { ++i >= TOTAL ? done() : show(); }
+
+        function done() {
+            $("qcard").style.display = "none"; $("pbar").style.width = "100%";
+            $("plb").textContent = "Abgeschlossen"; $("ppc").textContent = "100%"; $("srem").textContent = TOTAL;
+            const p = Math.round(cor / TOTAL * 100);
+            $("dcard").style.display = "block"; $("dscr").textContent = `${cor} / ${TOTAL}`;
+            $("dico").textContent = p === 100 ? "🏆" : p >= 70 ? "👍" : "📖";
+            $("dmsg").textContent = p === 100 ? "Perfekt — alles fehlerfrei! Bereit fürs Cockpit." :
+                p >= 70 ? `Gut gemacht! Nur ${wrg} Fehler.` : "Weiter üben — schau dir die Referenz unten an!";
+
+            $("lb-form").style.display = "block";
+            $("lb-list").style.display = "none";
+            $("lb-name").value = "";
+            $("lb-name").focus();
+        }
+
+        function saveScore() {
+            const name = $("lb-name").value.trim() || "Anonym";
+            let lb = JSON.parse(localStorage.getItem("piloten-lb") || "[]");
+            lb.push({ name, cor, d: new Date().getTime() });
+            lb.sort((a, b) => b.cor - a.cor || a.d - b.d);
+            lb = lb.slice(0, 5);
+            localStorage.setItem("piloten-lb", JSON.stringify(lb));
+
+            $("lb-form").style.display = "none";
+            $("lb-list").style.display = "block";
+            $("lb-ul").innerHTML = lb.map((x, i) => `
+                <li style="display:flex; justify-content:space-between; padding: 6px 0; border-bottom:1px solid rgba(0,0,0,0.05)">
+                    <span><b>${i + 1}.</b> ${x.name}</span>
+                    <span style="font-weight:600">${x.cor} <small style="color:#777770">/ ${TOTAL}</small></span>
+                </li>
+            `).join("");
+            document.activeElement.blur(); // Focus entfernen, damit nächstes Enter das Quiz neu startet
+        }
+
+        function toggleRef() {
+            const g = $("rgrid"), open = g.style.display === "grid";
+            g.style.display = open ? "none" : "grid";
+            $("rbtn").textContent = open ? "▾ Referenz anzeigen" : "▴ Referenz ausblenden";
+        }
+
+        AB.forEach(([l, w]) => {
+            const d = document.createElement("div"); d.className = "ri";
+            d.innerHTML = `<span class="rl">${l}</span><span class="rw">${w}</span>`;
+            $("rgrid").appendChild(d);
+        });
+
+        $("inp").addEventListener("keydown", e => { if (e.key === "Enter") { e.stopPropagation(); go(); } });
+        document.addEventListener("keydown", e => {
+            if (e.key !== "Enter") return;
+            if ($("qcard").style.display !== "none" && adv) {
+                nxt();
+            } else if ($("dcard").style.display !== "none") {
+                if ($("lb-form").style.display !== "none" && document.activeElement === $("lb-name")) {
+                    saveScore();
+                } else {
+                    restart();
+                }
+            }
+        });
+
+        restart();
+    </script>
+</body>
+
+</html>
