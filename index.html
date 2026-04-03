@@ -425,15 +425,7 @@
         const $ = id => document.getElementById(id);
         const norm = s => s.trim().toLowerCase().replace(/[-\s]/g, "");
 
-        // Levenshtein distance für smarte Tippfehlertoleranz
-        const lev = (a, b) => {
-            const m = Array.from({ length: b.length + 1 }, (_, i) => [i]);
-            m[0] = Array.from({ length: a.length + 1 }, (_, j) => j);
-            for (let i = 1; i <= b.length; i++)
-                for (let j = 1; j <= a.length; j++)
-                    m[i][j] = b[i - 1] === a[j - 1] ? m[i - 1][j - 1] : Math.min(m[i - 1][j - 1], m[i][j - 1], m[i - 1][j]) + 1;
-            return m[b.length][a.length];
-        };
+
 
         function restart() {
             // Wähle 30 zufällige Buchstaben für das Quiz (ohne aufeinanderfolgende Wiederholungen)
@@ -473,8 +465,7 @@
             if (!val) return inp.focus();
 
             const [letter, word] = order[i], nw = norm(word);
-            const d1 = lev(nw, val), d2 = lev(nw, norm(letter) + val);
-            const ok = Math.min(d1, d2) <= (nw.length > 3 ? 1 : 0); // 1 Tippfehler erlaubt bei längeren Wörtern
+            const ok = (val === nw) || (val === (norm(letter) + nw));
 
             inp.disabled = adv = true; $("sbtn").textContent = "Weiter →";
             $("ehi").style.display = $("hint").style.display = "block";
