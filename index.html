@@ -380,7 +380,7 @@
                 <button class="btn" onclick="saveScore()" style="width:100%">In Bestenliste eintragen (Enter)</button>
             </div>
             <div id="lb-list" style="text-align:left; font-size: 14px; margin-bottom: 1.5rem; display:none;">
-                <h3 style="font-size:16px; margin-bottom: 8px; text-align: center;">Top 5 Bestenliste</h3>
+                <h3 style="font-size:16px; margin-bottom: 8px; text-align: center;">Top 10 Bestenliste</h3>
                 <ul id="lb-ul" style="list-style: none; padding: 0;"></ul>
             </div>
 
@@ -543,18 +543,22 @@
 
                     const readOp = db.collection("leaderboard")
                         .orderBy("cor", "desc")
-                        .limit(5)
+                        .limit(10)
                         .get();
 
                     const snapshot = await Promise.race([readOp, timeout]);
 
                     let lbHTML = "";
                     let rang = 1;
+                    const fmtDate = (t) => t ? new Date(t).toLocaleDateString('de-DE', {day:'2-digit', month:'2-digit', year:'numeric'}) : '';
                     snapshot.forEach((doc) => {
                         const x = doc.data();
                         lbHTML += `
-                            <li style="display:flex; justify-content:space-between; padding: 6px 0; border-bottom:1px solid rgba(0,0,0,0.05)">
-                                <span><b>${rang}.</b> ${x.name}</span>
+                            <li style="display:flex; justify-content:space-between; align-items: center; padding: 8px 0; border-bottom:1px solid rgba(0,0,0,0.05)">
+                                <div style="display:flex; flex-direction:column; line-height: 1.2">
+                                    <span style="font-weight: 500"><b>${rang}.</b> ${x.name}</span>
+                                    <small style="color:#777770; font-size:10px">${fmtDate(x.timestamp)}</small>
+                                </div>
                                 <span style="font-weight:600">${x.cor} <small style="color:#777770">/ ${TOTAL}</small></span>
                             </li>
                         `;
