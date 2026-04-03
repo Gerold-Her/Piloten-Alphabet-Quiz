@@ -13,6 +13,7 @@
         }
 
         html {
+            height: 100%;
             overflow-y: scroll;
         }
 
@@ -22,11 +23,23 @@
             background-attachment: fixed;
             background-size: 300px 300px, 100% 100%;
             color: #1a1a18;
-            min-height: 100vh;
+            min-height: 100svh; /* More stable on mobile */
             display: flex;
             justify-content: center;
             padding: 1.5rem 1rem 5rem;
             -webkit-tap-highlight-color: transparent;
+            position: relative;
+        }
+
+        /* Prevent layout shift when keyboard appears on mobile browsers */
+        @media screen and (max-height: 500px) {
+            body {
+                min-height: 100%;
+                background-attachment: scroll;
+                align-items: flex-start;
+                padding-top: 0.5rem;
+            }
+            h1 { margin-top: 0; }
         }
 
         .impressum {
