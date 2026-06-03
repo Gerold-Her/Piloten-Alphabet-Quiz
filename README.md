@@ -2,7 +2,7 @@
 
 Ein interaktives Quiz zum Lernen und Üben des ICAO-Alphabets (NATO-Phonetik), direkt im Browser!
 
-## Demo
+## Zugang
 
 👉 (https://gerold-her.github.io/Piloten-Alphabet-Quiz)
 
@@ -13,10 +13,6 @@ Ein interaktives Quiz zum Lernen und Üben des ICAO-Alphabets (NATO-Phonetik), d
 - **20 zufällige Fragen** pro Durchgang – kein Buchstabe folgt direkt auf sich selbst
 - **Sofortiges Feedback** – richtige und falsche Antwort farblich hervorgehoben
 - **Referenztabelle** – alle 26 Buchstaben jederzeit ausklappbar
-- **Top 10 Bestenliste** – gespeichert in Firebase Firestore, live nach dem Quiz
-- **Dark Mode** – automatisch je nach Systemeinstellung
-- **Mobile-optimiert** – stabile Darstellung auch wenn die Tastatur aufgeht
-- **Kein Framework** – reines HTML, CSS und JavaScript in einer einzigen Datei
 
 ---
 
