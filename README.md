@@ -1,10 +1,10 @@
 # Piloten-Alphabet Quiz ✈️
 
-Ein interaktives Quiz zum Lernen und Üben des ICAO-Alphabets (NATO-Phonetik), direkt im Browser – ohne Installation, ohne App.
+Ein interaktives Quiz zum Lernen und Üben des ICAO-Alphabets (NATO-Phonetik), direkt im Browser!
 
 ## Demo
 
-👉 [https://gerold-her.github.io/Piloten-Alphabet-Quiz](https://gerold-her.github.io/Piloten-Alphabet-Quiz)
+👉 (https://gerold-her.github.io/Piloten-Alphabet-Quiz)
 
 ---
 
@@ -37,41 +37,6 @@ Ein interaktives Quiz zum Lernen und Üben des ICAO-Alphabets (NATO-Phonetik), d
 | K | Kilo | X | X-ray |
 | L | Lima | Y | Yankee |
 | M | Mike | Z | Zulu |
-
----
-
-## Technik
-
-| Bereich | Technologie |
-|---------|-------------|
-| Frontend | HTML, CSS, JavaScript (vanilla) |
-| Datenbank | Firebase Firestore |
-| Sicherheit | Firebase App Check + reCAPTCHA v3 |
-| Hosting | GitHub Pages |
-
-### Firebase Sicherheitsregeln
-
-Die Firestore-Datenbank ist mit folgenden Regeln abgesichert:
-
-- Bestenliste ist öffentlich **lesbar**
-- Einträge können **nur erstellt**, nicht geändert oder gelöscht werden
-- Pflichtfelder (`name`, `cor`, `timestamp`) und Wertebereich (0–20 Punkte, Name max. 50 Zeichen) werden serverseitig geprüft
-- Alle anderen Collections sind vollständig gesperrt
-- Firebase App Check mit reCAPTCHA v3 verhindert direkten API-Zugriff ohne Browser-Kontext
-
----
-
-## Lokale Nutzung
-
-Die App benötigt keinen Server oder Build-Schritt:
-
-```bash
-git clone https://github.com/Gerold-Her/Piloten-Alphabet-Quiz.git
-cd Piloten-Alphabet-Quiz
-# index.html direkt im Browser öffnen
-```
-
----
 
 ## Impressum
 
