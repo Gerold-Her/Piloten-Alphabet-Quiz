@@ -4,7 +4,7 @@ Ein interaktives Quiz zum Lernen und Üben des ICAO-Alphabets (NATO-Phonetik), d
 
 ## Demo
 
-👉 [https://gerold-her.github.io/Piloten-Alphabet-Quiz](https://gerold-her.github.io/Piloten-Alphabet-Quiz) *(oder die index.html direkt öffnen)*
+👉 [https://gerold-her.github.io/Piloten-Alphabet-Quiz](https://gerold-her.github.io/Piloten-Alphabet-Quiz)
 
 ---
 
